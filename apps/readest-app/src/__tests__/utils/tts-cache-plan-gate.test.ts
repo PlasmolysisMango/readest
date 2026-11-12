@@ -16,13 +16,13 @@ describe('isTTSCacheInPlan', () => {
   });
 });
 
-describe('isTTSCacheAllowed (premium paywall)', () => {
-  test('downloading TTS audio for offline playback requires a paid plan', () => {
-    expect(TTS_CACHE_REQUIRES_PREMIUM).toBe(true);
-    expect(isTTSCacheAllowed('free', false)).toBe(false);
+describe('isTTSCacheAllowed (paywall switch off)', () => {
+  test('every plan may download TTS audio for offline playback', () => {
+    expect(TTS_CACHE_REQUIRES_PREMIUM).toBe(false);
+    expect(isTTSCacheAllowed('free', false)).toBe(true);
     expect(isTTSCacheAllowed('plus', false)).toBe(true);
     expect(isTTSCacheAllowed('pro', false)).toBe(true);
-    expect(isTTSCacheAllowed('purchase', false)).toBe(false);
+    expect(isTTSCacheAllowed('purchase', false)).toBe(true);
   });
 });
 
@@ -36,7 +36,7 @@ describe('isTTSCacheAllowed — customization unlock', () => {
     expect(isTTSCacheAllowed('purchase', true)).toBe(true);
   });
 
-  test('does not entitle a storage-only buyer after the grace period', () => {
-    expect(isTTSCacheAllowed('purchase', false)).toBe(false);
+  test('allows a storage-only buyer too while the switch is off', () => {
+    expect(isTTSCacheAllowed('purchase', false)).toBe(true);
   });
 });

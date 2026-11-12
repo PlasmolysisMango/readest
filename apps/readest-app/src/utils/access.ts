@@ -81,10 +81,10 @@ export const isCloudSyncAllowed = (plan: UserPlan, customizationPurchased: boole
   !CLOUD_SYNC_REQUIRES_PREMIUM || isCloudSyncInPlan(plan, customizationPurchased);
 
 /**
- * Plans that include the offline TTS audio cache — pre-downloading a book's
- * Read Aloud audio per chapter so it plays without a network: any paid plan
- * (Plus, Pro, and Lifetime `purchase`). Free users see the download row with a
- * Premium badge and an upgrade route instead of the per-chapter controls.
+ * Plans that would include the offline TTS audio cache — pre-downloading a
+ * book's Read Aloud audio per chapter so it plays without a network: any paid
+ * plan (Plus, Pro, and Lifetime `purchase`). Only consulted while
+ * {@link TTS_CACHE_REQUIRES_PREMIUM} is on.
  */
 export const TTS_CACHE_PLANS: readonly UserPlan[] = ['plus', 'pro', 'purchase'];
 
@@ -93,12 +93,13 @@ export const isTTSCacheInPlan = (plan: UserPlan, customizationPurchased: boolean
 
 /**
  * Master switch for the offline-audio premium paywall, mirroring
- * {@link CLOUD_SYNC_REQUIRES_PREMIUM}. ON: pre-downloading TTS audio requires a
- * {@link TTS_CACHE_PLANS} plan. Flipping it off ungates every plan. The
- * automatic playback cache (audio kept as the user listens) is unaffected —
- * only the explicit download UI is gated.
+ * {@link CLOUD_SYNC_REQUIRES_PREMIUM}. Off (current): every plan, including
+ * free and signed out, can pre-download TTS audio. ON would require a
+ * {@link TTS_CACHE_PLANS} plan. The automatic playback cache (audio kept as
+ * the user listens) is unaffected either way — only the explicit download UI
+ * is gated.
  */
-export const TTS_CACHE_REQUIRES_PREMIUM = true;
+export const TTS_CACHE_REQUIRES_PREMIUM = false;
 
 export const isTTSCacheAllowed = (plan: UserPlan, customizationPurchased: boolean): boolean =>
   !TTS_CACHE_REQUIRES_PREMIUM || isTTSCacheInPlan(plan, customizationPurchased);
